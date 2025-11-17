@@ -1,0 +1,38 @@
+⚠️ IMPORTANTE: Verifique se sua pasta templates/ está sendo enviada para o GitHub!
+
+PROBLEMA:
+- O Render está reportando: jinja2.exceptions.TemplateNotFound: login.html
+- Isso significa que a pasta templates/ não está no repositório GitHub
+
+SOLUÇÃO:
+
+1. Verifique seu arquivo .gitignore:
+   - Se templates/ ou *.html estiver no .gitignore, REMOVA!
+   - Templates precisam estar no Git para funcionar no Render
+
+2. Adicione os templates ao Git:
+   ```bash
+   git add templates/
+   git add templates/*.html
+   git commit -m "Adicionar templates ao repositório"
+   git push
+   ```
+
+3. Verifique se os arquivos estão no GitHub:
+   - Acesse seu repositório no GitHub
+   - Verifique se existe a pasta templates/
+   - Verifique se os arquivos login.html, index.html, admin.html estão lá
+
+4. Se os arquivos não estão no GitHub:
+   ```bash
+   # Ver o que está sendo ignorado
+   git status
+   
+   # Forçar adicionar templates mesmo se estiverem no .gitignore
+   git add -f templates/
+   git commit -m "Adicionar templates"
+   git push
+   ```
+
+5. Após adicionar ao Git, faça um novo deploy no Render
+

@@ -9,7 +9,7 @@ import secrets
 from datetime import datetime
 from functools import wraps
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates', static_folder='static')
 app.secret_key = os.getenv('SECRET_KEY', secrets.token_hex(16))
 db = Database()
 osint = OSINTTools()
