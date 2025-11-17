@@ -221,6 +221,181 @@ def buscar_cpf():
     except Exception as e:
         return jsonify({'erro': str(e)}), 500
 
+@app.route('/api/buscar/email', methods=['POST'])
+def buscar_email():
+    """API para buscar por email"""
+    try:
+        data = request.get_json()
+        email = data.get('email', '').strip()
+        
+        if not email:
+            return jsonify({'erro': 'Email não fornecido'}), 400
+        
+        # Realizar busca OSINT
+        resultado = osint.buscar_email(email)
+        
+        # Salvar no banco de dados
+        for fonte in resultado.get('fontes', []):
+            db.salvar_historico(
+                tipo_busca='email',
+                termo_busca=email,
+                resultado=json.dumps(resultado, ensure_ascii=False)
+            )
+        
+        return jsonify(resultado), 200
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
+@app.route('/api/buscar/telefone', methods=['POST'])
+def buscar_telefone():
+    """API para buscar por telefone"""
+    try:
+        data = request.get_json()
+        telefone = data.get('telefone', '').strip()
+        
+        if not telefone:
+            return jsonify({'erro': 'Telefone não fornecido'}), 400
+        
+        # Realizar busca OSINT
+        resultado = osint.buscar_telefone(telefone)
+        
+        # Salvar no banco de dados
+        for fonte in resultado.get('fontes', []):
+            db.salvar_historico(
+                tipo_busca='telefone',
+                termo_busca=telefone,
+                resultado=json.dumps(resultado, ensure_ascii=False)
+            )
+        
+        return jsonify(resultado), 200
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
+@app.route('/api/buscar/username', methods=['POST'])
+def buscar_username():
+    """API para buscar username"""
+    try:
+        data = request.get_json()
+        username = data.get('username', '').strip()
+        
+        if not username:
+            return jsonify({'erro': 'Username não fornecido'}), 400
+        
+        # Realizar busca OSINT
+        resultado = osint.buscar_username(username)
+        
+        # Salvar no banco de dados
+        for fonte in resultado.get('fontes', []):
+            db.salvar_historico(
+                tipo_busca='username',
+                termo_busca=username,
+                resultado=json.dumps(resultado, ensure_ascii=False)
+            )
+        
+        return jsonify(resultado), 200
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
+@app.route('/api/buscar/dominio', methods=['POST'])
+def buscar_dominio():
+    """API para buscar domínio/IP"""
+    try:
+        data = request.get_json()
+        dominio_ip = data.get('dominio_ip', '').strip()
+        
+        if not dominio_ip:
+            return jsonify({'erro': 'Domínio ou IP não fornecido'}), 400
+        
+        # Realizar busca OSINT
+        resultado = osint.buscar_dominio_ip(dominio_ip)
+        
+        # Salvar no banco de dados
+        for fonte in resultado.get('fontes', []):
+            db.salvar_historico(
+                tipo_busca='dominio',
+                termo_busca=dominio_ip,
+                resultado=json.dumps(resultado, ensure_ascii=False)
+            )
+        
+        return jsonify(resultado), 200
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
+@app.route('/api/buscar/veiculo', methods=['POST'])
+def buscar_veiculo():
+    """API para buscar por placa"""
+    try:
+        data = request.get_json()
+        placa = data.get('placa', '').strip()
+        
+        if not placa:
+            return jsonify({'erro': 'Placa não fornecida'}), 400
+        
+        # Realizar busca OSINT
+        resultado = osint.buscar_veiculo(placa)
+        
+        # Salvar no banco de dados
+        for fonte in resultado.get('fontes', []):
+            db.salvar_historico(
+                tipo_busca='veiculo',
+                termo_busca=placa,
+                resultado=json.dumps(resultado, ensure_ascii=False)
+            )
+        
+        return jsonify(resultado), 200
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
+@app.route('/api/buscar/endereco', methods=['POST'])
+def buscar_endereco():
+    """API para buscar por endereço"""
+    try:
+        data = request.get_json()
+        endereco = data.get('endereco', '').strip()
+        
+        if not endereco:
+            return jsonify({'erro': 'Endereço não fornecido'}), 400
+        
+        # Realizar busca OSINT
+        resultado = osint.buscar_endereco(endereco)
+        
+        # Salvar no banco de dados
+        for fonte in resultado.get('fontes', []):
+            db.salvar_historico(
+                tipo_busca='endereco',
+                termo_busca=endereco,
+                resultado=json.dumps(resultado, ensure_ascii=False)
+            )
+        
+        return jsonify(resultado), 200
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
+@app.route('/api/buscar/vazamentos', methods=['POST'])
+def verificar_vazamentos():
+    """API para verificar vazamentos de dados"""
+    try:
+        data = request.get_json()
+        email = data.get('email', '').strip()
+        
+        if not email:
+            return jsonify({'erro': 'Email não fornecido'}), 400
+        
+        # Realizar busca OSINT
+        resultado = osint.verificar_vazamentos(email)
+        
+        # Salvar no banco de dados
+        for fonte in resultado.get('fontes', []):
+            db.salvar_historico(
+                tipo_busca='vazamentos',
+                termo_busca=email,
+                resultado=json.dumps(resultado, ensure_ascii=False)
+            )
+        
+        return jsonify(resultado), 200
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
 @app.route('/api/historico', methods=['GET'])
 def obter_historico():
     """API para obter histórico de buscas"""
@@ -436,10 +611,13 @@ def admin_update_permissao():
 if __name__ == '__main__':
     print("=" * 50)
     print("Seita Research starting...")
-    print("Access: http://localhost:5000")
+    port = int(os.environ.get('PORT', 5000))
+    print(f"Access: http://localhost:{port}")
     print("=" * 50)
     print("Default account created:")
     print("  Admin: finmogg@gmail.com / MOGG1212")
     print("=" * 50)
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Em produção, debug deve ser False
+    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(debug=debug_mode, host='0.0.0.0', port=port)
 
