@@ -2,7 +2,17 @@
 
 ## ⚠️ IMPORTANTE: GitHub Pages NÃO funciona para Flask!
 
-GitHub Pages só serve sites estáticos. Seu site Flask precisa de um **servidor Python rodando 24/7**.
+**GitHub Pages só serve sites estáticos (HTML puro).**
+
+Seu site Flask precisa de:
+- ✅ Servidor Python rodando 24/7
+- ✅ Banco de dados SQLite
+- ✅ APIs backend funcionando
+- ✅ Autenticação e sessões
+
+**Por isso no GitHub Pages você vê apenas os arquivos .txt do repositório!**
+
+### ✅ SOLUÇÃO: Use Render.com (GRÁTIS e funciona perfeitamente)
 
 ## ✅ Solução: Render.com (GRÁTIS)
 

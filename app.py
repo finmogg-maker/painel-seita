@@ -19,16 +19,30 @@ osint = OSINTTools()
 def before_request():
     log_request()
 
+# Health check endpoint para serviços de hospedagem (Render, Railway, etc.)
+@app.route('/health')
+@app.route('/healthz')
+@app.route('/ping')
+def health_check():
+    """Endpoint de health check para monitoramento"""
+    return jsonify({'status': 'ok', 'service': 'OSINT Tool'}), 200
+
 @app.route('/')
 def index():
     """Página principal"""
+    # Tratar requisições HEAD (health checks)
+    if request.method == 'HEAD':
+        return '', 200
     if not is_authenticated():
         return redirect(url_for('login'))
     return render_template('index.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'HEAD'])
 def login():
     """Página de login"""
+    # Tratar requisições HEAD (health checks)
+    if request.method == 'HEAD':
+        return '', 200
     if is_authenticated():
         return redirect(url_for('index'))
     return render_template('login.html')
@@ -540,9 +554,12 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@app.route('/admin')
+@app.route('/admin', methods=['GET', 'HEAD'])
 def admin_panel():
     """Admin panel page"""
+    # Tratar requisições HEAD (health checks)
+    if request.method == 'HEAD':
+        return '', 200
     if not is_authenticated():
         return redirect(url_for('index'))
     
